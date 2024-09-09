@@ -1,0 +1,19 @@
+{
+  "name": "ton-plugin",
+  "version": "1.0.0",
+  "description": "Un plugin WordPress utilisant Laravel Mix pour la compilation",
+  "scripts": {
+    "dev": "mix",
+    "watch": "mix watch",
+    "production": "mix --production"
+  },
+  "author": "Ton Nom",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^3.0.2",
+    "browser-sync-webpack-plugin": "^2.3.0",
+    "laravel-mix": "^6.0.0",
+    "sass": "^1.32.0",
+    "sass-loader": "^12.1.0"
+  }
+}
