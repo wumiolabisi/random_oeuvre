@@ -1,5 +1,5 @@
 {
-  "name": "ton-plugin",
+  "name": "random-oeuvre",
   "version": "1.0.0",
   "description": "Un plugin WordPress utilisant Laravel Mix pour la compilation",
   "scripts": {

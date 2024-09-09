@@ -1,61 +1,88 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/modules/getAllOeuvres.js":
+/*!**************************************!*\
+  !*** ./src/modules/getAllOeuvres.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getAllOeuvres: () => (/* binding */ getAllOeuvres)
+/* harmony export */ });
+function getAllOeuvres() {
+  var ids = [];
+  var randomOeuvres = [];
+  var fetchPromises = [];
+
+  //Fouiller dans les posts existants
+  var allOeuvres = new wp.api.collections.Oeuvres();
+  allOeuvres.fetch().done(function (posts) {
+    // Stocker les IDs existants
+    posts.forEach(function (post) {
+      ids.push(post.id);
+    });
+
+    //Choisir 3 ids au hasard dans les ids existants
+    for (var i = 0; i < 3; i++) {
+      randomOeuvres.push(ids[Math.floor(Math.random() * ids.length)]);
+    }
+
+    //Pour chaque id choisi, on appelle le post correspondant
+    //et on stocke la Promise
+    randomOeuvres.forEach(function (id) {
+      var post = new wp.api.models.Oeuvres({
+        id: id
+      });
+      fetchPromises.push(post.fetch());
+    });
+
+    //Promise.all pour attendre que toutes les requêtes fetch soient complètes
+
+    Promise.all(fetchPromises).then(function (posts) {
+      return posts;
+    })["catch"](function (error) {
+      console.error('Erreur lors de la récupération des posts : ', error);
+    });
+  });
+}
+
+/***/ }),
 
 /***/ "./src/random-oeuvre.js":
 /*!******************************!*\
   !*** ./src/random-oeuvre.js ***!
   \******************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _modules_getAllOeuvres__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/getAllOeuvres */ "./src/modules/getAllOeuvres.js");
 
 var loadRandomPosts = document.getElementById('random-oeuvre-btn');
-var ids = [];
-var randomOeuvres = [];
 if (loadRandomPosts) {
   loadRandomPosts.addEventListener('click', function () {
-    var allOeuvres = new wp.api.collections.Oeuvres();
     var popup = document.createElement('div');
     popup.className = 'random-popup-container';
     var popupContent = document.createElement('div');
     popupContent.className = 'random-popup-content';
     popup.appendChild(popupContent);
-    // Tableau pour stocker les promesses de fetch
-    var fetchPromises = [];
-    allOeuvres.fetch().done(function (posts) {
-      posts.forEach(function (post) {
-        ids.push(post.id);
-      });
-      /**
-       * Get 3 random posts from existing ids
-       */
-      for (var i = 0; i < 3; i++) {
-        randomOeuvres.push(ids[Math.floor(Math.random() * ids.length)]);
-      }
-      randomOeuvres.forEach(function (id) {
-        var post = new wp.api.models.Oeuvres({
-          id: id
-        });
-        fetchPromises.push(post.fetch());
-      });
-
-      /**
-       * Promise.all pour attendre que toutes les requêtes fetch soient complètes
-       */
-      Promise.all(fetchPromises).then(function (posts) {
-        console.log('Variable POSTS : ' + posts);
-
-        // Vide le contenu précédent du popup
-        popupContent.innerHTML = '';
-
-        // Crée le contenu du popup avec tous les posts récupérés
-        posts.forEach(function (post) {
-          console.log(post);
-          popupContent.innerHTML += "\n                            <div class=\"random-popup-item\">\n                                  <a href=\"".concat(post.link, "\" target=\"_blank\">\n                                 \n                                     <p class=\"h2\">").concat(post.title.rendered, "</p>\n                                    </a>\n                             </div>");
-        });
-        document.body.appendChild(popup);
-      })["catch"](function (error) {
-        console.error('Erreur lors de la récupération des posts:', error);
-      });
-    });
+    popupContent.innerHTML = '';
+    console.log((0,_modules_getAllOeuvres__WEBPACK_IMPORTED_MODULE_0__.getAllOeuvres)());
+    /*
+            posts.forEach(post => {
+    
+    
+                popupContent.innerHTML += `
+                                <div class="random-popup-item">
+                                      <a href="${post.link}" target="_blank">
+                                     
+                                         <p class="h2">${post.title.rendered}</p>
+                                        </a>
+                                 </div>`;
+            });*/
+    document.body.appendChild(popup);
   });
 }
 
@@ -67,7 +94,6 @@ if (loadRandomPosts) {
   \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
@@ -136,6 +162,18 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
@@ -201,7 +239,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			return __webpack_require__.O(result);
 /******/ 		}
 /******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkton_plugin"] = self["webpackChunkton_plugin"] || [];
+/******/ 		var chunkLoadingGlobal = self["webpackChunkrandom_oeuvre"] = self["webpackChunkrandom_oeuvre"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
