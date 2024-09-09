@@ -41,7 +41,7 @@ add_action('wp_enqueue_scripts', 'random_oeuvre_assets');
 
 function get_random_oeuvre_shortcode()
 {
-    return '<button id="random-oeuvre-btn">Test</button>';
+    return '<button id="random-oeuvre-btn">LA FLEMME DE CHERCHER ?</button>';
 }
 add_shortcode('get_random_oeuvre', 'get_random_oeuvre_shortcode');
 
