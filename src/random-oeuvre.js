@@ -1,4 +1,4 @@
-import { getAllOeuvres } from "./modules/getAllOeuvres";
+import { getRandomOeuvres } from "./modules/getAllOeuvres";
 
 const loadRandomPosts = document.getElementById('random-oeuvre-btn');
 
@@ -15,19 +15,22 @@ if (loadRandomPosts) {
 
         popupContent.innerHTML = '';
 
-        console.log(getAllOeuvres());
-        /*
-                posts.forEach(post => {
-        
-        
-                    popupContent.innerHTML += `
-                                    <div class="random-popup-item">
-                                          <a href="${post.link}" target="_blank">
-                                         
-                                             <p class="h2">${post.title.rendered}</p>
-                                            </a>
-                                     </div>`;
-                });*/
+        getRandomOeuvres().then(posts => {
+            console.log(posts);
+            posts.forEach(post => {
+                popupContent.innerHTML += `
+                <div class="random-popup-item">
+                      <a href="${post.link}" target="_blank">
+                     
+                         <p class="h2">${post.title.rendered}</p>
+                        </a>
+                 </div>`;
+            });
+
+        }).catch(error => {
+            popupContent.innerHTML += `<div class="random-popup-item">Erreur lors de la récupération des posts : ${error}</div>`;
+        });
+
         document.body.appendChild(popup);
 
 

@@ -1,43 +1,27 @@
-export function getAllOeuvres() {
+export function getRandomOeuvres() {
 
     let ids = [];
-    let randomOeuvres = [];
     let fetchPromises = [];
 
-    //Fouiller dans les posts existants
+    //Fouiller dans les posts de type Oeuvres existants
     const allOeuvres = new wp.api.collections.Oeuvres();
-    allOeuvres.fetch().done(function (posts) {
 
+    return allOeuvres.fetch().then(function (postsId) {
         // Stocker les IDs existants
-        posts.forEach(post => {
+
+        postsId.forEach(post => {
             ids.push(post.id);
         });
 
+
         //Choisir 3 ids au hasard dans les ids existants
         for (let i = 0; i < 3; i++) {
-            randomOeuvres.push(ids[Math.floor(Math.random() * ids.length)]);
+            let selectedId = ids[Math.floor(Math.random() * ids.length)];
+            let selectedPost = new wp.api.models.Oeuvres({ id: selectedId });
+            fetchPromises.push(selectedPost.fetch());
         }
 
-        //Pour chaque id choisi, on appelle le post correspondant
-        //et on stocke la Promise
-        randomOeuvres.forEach(id => {
-            let post = new wp.api.models.Oeuvres({ id: id });
-            fetchPromises.push(post.fetch());
-
-        });
-
-
         //Promise.all pour attendre que toutes les requêtes fetch soient complètes
-
-        Promise.all(fetchPromises)
-            .then(posts => {
-                return posts;
-            })
-            .catch(error => {
-                console.error('Erreur lors de la récupération des posts : ', error);
-            });
-
-
+        return Promise.all(fetchPromises);
     });
-
 }

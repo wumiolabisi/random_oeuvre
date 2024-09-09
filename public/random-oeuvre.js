@@ -10,42 +10,32 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   getAllOeuvres: () => (/* binding */ getAllOeuvres)
+/* harmony export */   getRandomOeuvres: () => (/* binding */ getRandomOeuvres)
 /* harmony export */ });
-function getAllOeuvres() {
+function getRandomOeuvres() {
   var ids = [];
-  var randomOeuvres = [];
   var fetchPromises = [];
 
-  //Fouiller dans les posts existants
+  //Fouiller dans les posts de type Oeuvres existants
   var allOeuvres = new wp.api.collections.Oeuvres();
-  allOeuvres.fetch().done(function (posts) {
+  return allOeuvres.fetch().then(function (postsId) {
     // Stocker les IDs existants
-    posts.forEach(function (post) {
+
+    postsId.forEach(function (post) {
       ids.push(post.id);
     });
 
     //Choisir 3 ids au hasard dans les ids existants
     for (var i = 0; i < 3; i++) {
-      randomOeuvres.push(ids[Math.floor(Math.random() * ids.length)]);
+      var selectedId = ids[Math.floor(Math.random() * ids.length)];
+      var selectedPost = new wp.api.models.Oeuvres({
+        id: selectedId
+      });
+      fetchPromises.push(selectedPost.fetch());
     }
 
-    //Pour chaque id choisi, on appelle le post correspondant
-    //et on stocke la Promise
-    randomOeuvres.forEach(function (id) {
-      var post = new wp.api.models.Oeuvres({
-        id: id
-      });
-      fetchPromises.push(post.fetch());
-    });
-
     //Promise.all pour attendre que toutes les requêtes fetch soient complètes
-
-    Promise.all(fetchPromises).then(function (posts) {
-      return posts;
-    })["catch"](function (error) {
-      console.error('Erreur lors de la récupération des posts : ', error);
-    });
+    return Promise.all(fetchPromises);
   });
 }
 
@@ -69,19 +59,14 @@ if (loadRandomPosts) {
     popupContent.className = 'random-popup-content';
     popup.appendChild(popupContent);
     popupContent.innerHTML = '';
-    console.log((0,_modules_getAllOeuvres__WEBPACK_IMPORTED_MODULE_0__.getAllOeuvres)());
-    /*
-            posts.forEach(post => {
-    
-    
-                popupContent.innerHTML += `
-                                <div class="random-popup-item">
-                                      <a href="${post.link}" target="_blank">
-                                     
-                                         <p class="h2">${post.title.rendered}</p>
-                                        </a>
-                                 </div>`;
-            });*/
+    (0,_modules_getAllOeuvres__WEBPACK_IMPORTED_MODULE_0__.getRandomOeuvres)().then(function (posts) {
+      console.log(posts);
+      posts.forEach(function (post) {
+        popupContent.innerHTML += "\n                <div class=\"random-popup-item\">\n                      <a href=\"".concat(post.link, "\" target=\"_blank\">\n                     \n                         <p class=\"h2\">").concat(post.title.rendered, "</p>\n                        </a>\n                 </div>");
+      });
+    })["catch"](function (error) {
+      popupContent.innerHTML += "<div class=\"random-popup-item\">Erreur lors de la r\xE9cup\xE9ration des posts : ".concat(error, "</div>");
+    });
     document.body.appendChild(popup);
   });
 }
