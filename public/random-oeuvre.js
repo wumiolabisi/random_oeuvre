@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/modules/getAllOeuvres.js":
-/*!**************************************!*\
-  !*** ./src/modules/getAllOeuvres.js ***!
-  \**************************************/
+/***/ "./src/modules/getRandomOeuvres.js":
+/*!*****************************************!*\
+  !*** ./src/modules/getRandomOeuvres.js ***!
+  \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -18,7 +18,11 @@ function getRandomOeuvres() {
 
   //Fouiller dans les posts de type Oeuvres existants
   var allOeuvres = new wp.api.collections.Oeuvres();
-  return allOeuvres.fetch().then(function (postsId) {
+  return allOeuvres.fetch({
+    data: {
+      _embed: true
+    }
+  }).then(function (postsId) {
     // Stocker les IDs existants
 
     postsId.forEach(function (post) {
@@ -31,7 +35,11 @@ function getRandomOeuvres() {
       var selectedPost = new wp.api.models.Oeuvres({
         id: selectedId
       });
-      fetchPromises.push(selectedPost.fetch());
+      fetchPromises.push(selectedPost.fetch({
+        data: {
+          _embed: true
+        }
+      }));
     }
 
     //Promise.all pour attendre que toutes les requêtes fetch soient complètes
@@ -48,7 +56,7 @@ function getRandomOeuvres() {
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_getAllOeuvres__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/getAllOeuvres */ "./src/modules/getAllOeuvres.js");
+/* harmony import */ var _modules_getRandomOeuvres__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/getRandomOeuvres */ "./src/modules/getRandomOeuvres.js");
 
 var loadRandomPosts = document.getElementById('random-oeuvre-btn');
 if (loadRandomPosts) {
@@ -59,10 +67,9 @@ if (loadRandomPosts) {
     popupContent.className = 'random-popup-content';
     popup.appendChild(popupContent);
     popupContent.innerHTML = '';
-    (0,_modules_getAllOeuvres__WEBPACK_IMPORTED_MODULE_0__.getRandomOeuvres)().then(function (posts) {
-      console.log(posts);
+    (0,_modules_getRandomOeuvres__WEBPACK_IMPORTED_MODULE_0__.getRandomOeuvres)().then(function (posts) {
       posts.forEach(function (post) {
-        popupContent.innerHTML += "\n                <div class=\"random-popup-item\">\n                      <a href=\"".concat(post.link, "\" target=\"_blank\">\n                     \n                         <p class=\"h2\">").concat(post.title.rendered, "</p>\n                        </a>\n                 </div>");
+        popupContent.innerHTML += "\n                <div class=\"random-popup-item\" id=\"".concat(post.id, "\">\n                      <a href=\"").concat(post.link, "\" target=\"_blank\">\n                      <p class=\"h2 ro-capitalize\">").concat(post.title.rendered, "</p>\n                      <div class=\"ro-featured-img\">\n                     <img src=\"").concat(post._embedded['wp:featuredmedia'][0].source_url, "\" class=\"ro-cover\"/>\n                     </div>\n                        </a>\n                 </div>");
       });
     })["catch"](function (error) {
       popupContent.innerHTML += "<div class=\"random-popup-item\">Erreur lors de la r\xE9cup\xE9ration des posts : ".concat(error, "</div>");

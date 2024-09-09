@@ -1,3 +1,27 @@
+/* Breakpoints */
+$xl: 87.5em; // 4k and hi-res desktop
+$lg: 60em; // 1080 and hi-res laptops
+$md: 40em; // hi-res tablets and low-res laptops
+$sm: 28em; // mobile and low-res tablets
+$xs: 20em; // mobile only
+
+/*
+** $breakpoint receive the breakpoint
+** the media query checks if min/max-width is equal or larger than the breakpoint
+** @content is all CSS property that has been sent when calling the mixin
+*/
+@mixin minScreenWidth($breakpoint) {
+    @media (min-width: $breakpoint ) {
+        @content;
+    }
+}
+
+@mixin maxScreenWidth($breakpoint) {
+    @media (max-width: $breakpoint ) {
+        @content;
+    }
+}
+
 #random-oeuvre-btn {
     width: 100px;
     height: 20px;
@@ -21,9 +45,32 @@ div.random-popup-container {
         position: relative;
         display: flex;
         flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 2%;
         margin: auto;
         width: 80%;
         padding: 2% 0;
         background-color: #ffffff;
+    }
+}
+
+.ro-capitalize {
+    text-transform: capitalize;
+}
+
+.ro-cover {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.ro-featured-img {
+    width: 100%;
+    height: 100%;
+
+    @include minScreenWidth($md) {
+        width: 250px;
+        height: 300px;
     }
 }

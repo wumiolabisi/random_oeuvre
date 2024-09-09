@@ -1,4 +1,4 @@
-import { getRandomOeuvres } from "./modules/getAllOeuvres";
+import { getRandomOeuvres } from "./modules/getRandomOeuvres";
 
 const loadRandomPosts = document.getElementById('random-oeuvre-btn');
 
@@ -16,13 +16,17 @@ if (loadRandomPosts) {
         popupContent.innerHTML = '';
 
         getRandomOeuvres().then(posts => {
-            console.log(posts);
+
+
             posts.forEach(post => {
+
                 popupContent.innerHTML += `
-                <div class="random-popup-item">
+                <div class="random-popup-item" id="${post.id}">
                       <a href="${post.link}" target="_blank">
-                     
-                         <p class="h2">${post.title.rendered}</p>
+                      <p class="h2 ro-capitalize">${post.title.rendered}</p>
+                      <div class="ro-featured-img">
+                     <img src="${post._embedded['wp:featuredmedia'][0].source_url}" class="ro-cover"/>
+                     </div>
                         </a>
                  </div>`;
             });
