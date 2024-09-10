@@ -3,8 +3,8 @@ let mix = require('laravel-mix');
 mix.setPublicPath('public'); // Définit le chemin de sortie des fichiers compilés
 
 // Compilation des fichiers JS
-mix.js('src/random-oeuvre.js', 'public/random-oeuvre.js')
-    .sass('src/random-oeuvre.scss', 'public/random-oeuvre.css')
+mix.js('src/main.js', 'public/main.js')
+    .sass('src/style.scss', 'public/style.css')
     .options({
         processCssUrls: false // Empêche Laravel Mix de modifier les URLs dans les fichiers CSS
     });
