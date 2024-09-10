@@ -20,7 +20,9 @@ export function getRandomOeuvres() {
 
         //Choisir 3 ids au hasard dans les ids existants
         for (let i = 0; i < 3; i++) {
-            let selectedId = ids[Math.floor(Math.random() * ids.length)];
+            let randomIndex = Math.floor(Math.random() * ids.length);
+            //stock l'id random + enlever l'id sélectionné de ids pour éviter les doublons
+            let selectedId = ids.splice(randomIndex, 1)[0];
             let selectedPost = new wp.api.models.Oeuvres({ id: selectedId });
             fetchPromises.push(selectedPost.fetch({
                 data: {

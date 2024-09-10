@@ -22,15 +22,15 @@ define('RANDOM_OEUVRE_VERSION', '1.0.0');
 function random_oeuvre_assets()
 {
     wp_enqueue_script(
-        'random-oeuvre',
-        plugin_dir_url(__FILE__) . 'public/random-oeuvre.js',
+        'ro-main',
+        plugin_dir_url(__FILE__) . 'public/main.js',
         array('jquery', 'wp-api'),
         '1.0',
         true
     );
     wp_enqueue_style(
-        'random-oeuvre',
-        plugin_dir_url(__FILE__) . 'public/random-oeuvre.css',
+        'ro-style',
+        plugin_dir_url(__FILE__) . 'public/style.css',
         array(),
         '1.0'
     );
