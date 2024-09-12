@@ -39,12 +39,17 @@ function random_oeuvre_assets()
 add_action('wp_enqueue_scripts', 'random_oeuvre_assets');
 
 
+function get_random_oeuvre_nav_shortcode()
+{
+    return '<button class="random-oeuvre-btn">LAISSEZ-VOUS SURPRENDRE</button>';
+}
+add_shortcode('get_random_oeuvre_nav', 'get_random_oeuvre_nav_shortcode');
+
 function get_random_oeuvre_shortcode()
 {
-    return '<button id="random-oeuvre-btn">LA FLEMME DE CHERCHER ?</button>';
+    return '<button class="random-oeuvre-btn ro-btn-extended-style">PROPOSEZ-MOI DES œUVRES</button>';
 }
 add_shortcode('get_random_oeuvre', 'get_random_oeuvre_shortcode');
-
 
 function random_oeuvre_activation() {}
 
